@@ -7,6 +7,7 @@ use Firebase\Database\ApiClient;
 use Firebase\Exception\InvalidArgumentException;
 use Firebase\Http\Middleware;
 use Firebase\ServiceAccount;
+use Firebase\V3\Auth\CustomAuthorizationToken;
 use Firebase\V3\Auth\CustomToken;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
@@ -128,5 +129,15 @@ class Firebase
         ];
 
         return new AuthTokenMiddleware(new ServiceAccountCredentials($scopes, $credentials));
+    }
+
+    public function createCustomToken(string $uid, array $claims = [], int $expiration = 1800) : CustomAuthorizationToken
+    {
+        return CustomAuthorizationToken::create(
+            $this->serviceAccount,
+            $uid,
+            $claims,
+            $expiration
+        );
     }
 }
